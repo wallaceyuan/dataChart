@@ -1,0 +1,23 @@
+{
+  "name": "dataChart",
+  "version": "0.0.0",
+  "homepage": "https://github.com/wallaceyuan/dataChart",
+  "authors": [
+    "wallaceyuan <1272864289@qq.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "./public/lib",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.5.3",
+    "angular-route": "~1.5.3",
+    "bootstrap": "~3.3.6",
+    "jquery": "~2.2.2"
+  }
+}
