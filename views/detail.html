@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="dataModule">
+<html>
 <head lang="en">
     <meta charset="UTF-8">
     <title>Title</title>
@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/css/dashboard.css">
     <link rel="stylesheet" href="/css/my.css">
 </head>
-<body>
+<body ng-app="dataModule">
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -38,15 +38,144 @@
     <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
-                <li><a href="#/main">全站<span class="sr-only">(current)</span></a></li>
-                <li ng-repeat="data in dataBox"><a href="#/{{data.name}}">{{data.name}}</a></li>
+                <li ng-click="change('全站')"><a href="/details">全站<span class="sr-only">(current)</span></a></li>
+                <li ng-click="change(data.name)" ng-repeat="data in dataBox"><a href="#/{{data.name}}">{{data.name}}</a></li>
             </ul>
+        </div>
+    </div>
+    <div ng-show="show" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <table class="general">
+                            <tbody>
+                            <tr>
+                                <td><i class="hd-task"></i> <span>任务说明</span></td>
+                                <td id="desc">全站数据统计</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-lg-9 col-md-9 col-sm-12" id="detailDataTable">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <div class="general-recent clearfix">
+                                <p class="general-recent-title">
+                                    <i class="hd-pv"></i><span>{{today_pv}}</span>
+                                </p>
+                                <p>
+                                    当天截止至{{timestamp}}累计总量
+                                </p>
+                                <p>
+                                    <span class="horizontal-line-shore"></span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <div class="general-recent clearfix">
+                                <p class="general-recent-title">
+                                    <i class="hd-uv"></i><span>{{delta_pv}}</span>
+                                </p>
+                                <p>
+                                    最新一小时
+                                </p>
+                                <p>
+                                    <span class="horizontal-line-shore"></span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <div class="general-recent clearfix">
+                                <p class="general-recent-title">
+                                    <i class="icon icon-stayTime"></i><span>{{yesterday_pv}}</span>
+                                </p>
+                                <p>
+                                    昨日
+                                </p>
+                                <p>
+                                    <span class="horizontal-line-shore"></span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading no-bottom">
+                <div>
+                    <h4 class="panel-heading-title"><i class="icon icon-mark" data-mark="share_level"></i> 数据饼图</h4>
+                </div>
+            </div>
+            <div id="main" class="container-fluid" style="height:500px;"></div>
+            <div id="mainBar" class="container-fluid" style="height:500px;"></div>
+        </div>
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="panel panel-default tabbable">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-href="tab1" data-toggle="tab">今日排行</a></li>
+                    <li><a data-href="tab2" data-toggle="tab">一小时排行</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="tab1" class="tab-pane active" >
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Click</th>
+                                        <th>Name</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="tot in total_amount">
+                                        <td>{{$index+1}}</td>
+                                        <td>{{tot.clicknum}}</td>
+                                        <td><a href="tot.pageurl">{{tot.title}}</a></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tab2" class="tab-pane">
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Click</th>
+                                        <th>Name</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="dot in total_delta">
+                                        <td>{{$index+1}}</td>
+                                        <td>{{dot.clicknum}}</td>
+                                        <td><a href="tot.pageurl">{{dot.title}}</a></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
         <div ng-view></div>
     </div>
-</div>
+
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <pre>$location.path() = {{$location.path()}}</pre>
+        <pre>$route.current.templateUrl = {{$route.current.templateUrl}}</pre>
+        <pre>$route.current.params = {{$route.current.params}}</pre>
+        <pre>$route.current.scope.name = {{$route.current.scope.name}}</pre>
+        <pre>$routeParams = {{$routeParams}}</pre>
+    </div>
 </div>
 
 <script src="/lib/jquery/dist/jquery.js"></script>
@@ -56,5 +185,6 @@
 <script src="/js/echarts.js"></script>
 
 <script src="/js/indexCtrl.js"></script>
+<script src="/js/func.js"></script>
 </body>
 </html>

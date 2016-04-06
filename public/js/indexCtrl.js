@@ -1,22 +1,21 @@
 /**
  * Created by Yuan on 2016/4/2.
  */
-
 angular.module('dataModule',['ngRoute']);
 
 angular.module('dataModule').factory('dataService',function($http){
     return {
-        list:function(){//列出所有
-            return $http.get('/details/nav');
+        list:function(index){//列出所有
+            return $http.get('/details/nav/'+index);
         },
         item:function(data){//增加
             //把data放在请求体里
-            return $http.post('/details/nav',data);
+            return $http.post('/details/nav/view',data);
         },
         delete:function(id){//增加
             return $http.delete('/todos/'+id);
         },
-        chart:function(nameBox,dataBox){
+        chart:function(nameBox,dataBox,nameAll,dataAll){
             var nameBox = nameBox;
             var dataBox = dataBox;
             var myChart = echarts.init(document.getElementById('main'));
@@ -57,30 +56,89 @@ angular.module('dataModule').factory('dataService',function($http){
                 ]
             };
             myChart.setOption(option);
+
+            var optiontwo = {
+                tooltip: {
+                    trigger: 'axis'
+                },
+                toolbox: {
+                    feature: {
+                        dataView: {show: true, readOnly: false},
+                        magicType: {show: true, type: ['line','bar']},
+                        restore: {show: true},
+                        saveAsImage: {show: true}
+                    }
+                },
+                legend: {
+                    data:['访问量']
+                },
+                xAxis: [
+                    {
+                        type: 'category',
+                        data: nameAll
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: '访问量',
+                        min: 0,
+                        max: dataAll[0],
+                        interval: 500000,
+                        axisLabel: {
+                            formatter: '{value} 次'
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        name:'蒸发量',
+                        type:'bar',
+                        data:dataAll
+                    }
+                ]
+            };
+            var myChartTwo = echarts.init(document.getElementById('mainBar'));
+            myChartTwo.setOption(optiontwo);
         }
     }
 });
 
-angular.module('dataModule').controller('indexCtrl',function($scope,dataService){
-    console.log(1111);
-    $scope.nameBox = '';$scope.dataBox = '';
-    dataService.list().success(function(data){
+angular.module('dataModule').controller('indexCtrl',function($scope,dataService,$location){
+    $scope.nameBox = '';$scope.dataBox = '';$scope.show = true;
+    $scope.name = '全站';
+    $scope.change = function(name){
+        if(name!='全站'){
+            $scope.show = false;
+        }else{
+            $scope.show = true;
+        }
+    }
+    if($location.path() != '/'){
+        $scope.name = 'view';
+        $scope.show = false;
+    }else{
+        $scope.show = true;
+    }
+    //$scope.change('全');
+    dataService.list($scope.name).success(function(data){
         $scope.nameBox = data.nameBox;
         $scope.dataBox = data.dataBox;
         $scope.total_amount = data.total_amount;
-        $scope.total_delta = data.total_delta;
         $scope.total_delta = data.total_delta;
         $scope.timestamp = data.timestamp;
         $scope.delta_pv =  data.delta_pv;
         $scope.today_pv =  data.today_pv;
         $scope.yesterday_pv = data.yesterday_pv;
-        dataService.chart($scope.nameBox,$scope.dataBox);
+        $scope.nameAll = data.nameAll;
+        $scope.dataAll = data.dataAll;
+        $scope.$location = $location;
+        dataService.chart($scope.nameBox,$scope.dataBox,$scope.nameAll,$scope.dataAll);
     });
 });
 angular.module('dataModule').controller('infoCtrl',function($scope,$routeParams,dataService){
     //从路由中得到ID
     var bookId = $routeParams.bookId;
-    console.log(bookId);
     $scope.nameBox = '';$scope.dataBox = '';
     dataService.item({name:bookId}).success(function(data){
         $scope.info_amount = data.total_amount;
@@ -93,15 +151,13 @@ angular.module('dataModule').controller('infoCtrl',function($scope,$routeParams,
     });
 });
 angular.module('dataModule').config(function($routeProvider){
-    //进行路由的配置
-    $routeProvider.when('/main',{
-        templateUrl:'tmp/main.html',
+    $routeProvider.when('/',{
         controller:'indexCtrl'
     }).when('/:bookId',{
         templateUrl:'tmp/info.html',
         controller:'infoCtrl'
     }).otherwise({
-        redirectTo:'/main'
+        redirectTo:'/'
     });
 });
 
