@@ -15,7 +15,7 @@ router.post('/now',function(req, res, next) {
 });
 //给路由先指定路径，再指定方法，还可以链式调用
 router.route('/nav/:_id').get(function (req, res, next) {
-    console.log(req.params._id);
+    var id = req.params._id;
     async.parallel([
         function (cb) {
             console.log(1);
@@ -23,15 +23,22 @@ router.route('/nav/:_id').get(function (req, res, next) {
             db.list(url,cb);
         },
         function(cb){
-            console.log(2,req.params._id);
-            db.pre('all',cb);
+            if(id != 'view'){
+                console.log(2,req.params._id);
+                db.pre('all',cb);
+            }else{
+                var res = Array();res['pre'] = '111';
+                cb(null,res);
+            }
         }
     ], function (err, result) {
-        var r = result[0],pre = result['pre'];
+        var r = result[0];
+        var pre = result[1]['pre'];
         res.send({
+            timeBox:pre.timeBox,clickBox :pre.clickBox,dtBox :pre.dtBox,dclickBox:pre.dclickBox,
             nameBox:r.nameBox, dataBox:r.dataBox, total_amount:r.total_amount,
             total_delta:r.total_delta, nameAll:r.nameAll,dataAll:r.dataAll,
-            timestamp:r.timestamp,delta_pv:r.delta_pv,today_pv:r.today_pv,yesterday_pv:r.yesterday_pv,pre:pre
+            timestamp:r.timestamp,delta_pv:r.delta_pv,today_pv:r.today_pv,yesterday_pv:r.yesterday_pv
         });
     });
 }).post(function (req, res) {

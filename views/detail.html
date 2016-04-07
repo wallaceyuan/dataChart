@@ -38,7 +38,7 @@
     <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
-                <li ng-click="change('全站')"><a href="/details">全站<span class="sr-only">(current)</span></a></li>
+                <li ng-click="change('全站')"><a href="/details#/">全站<span class="sr-only">(current)</span></a></li>
                 <li ng-click="change(data.name)" ng-repeat="data in dataBox"><a href="#/{{data.name}}">{{data.name}}</a></li>
             </ul>
         </div>
@@ -103,12 +103,22 @@
         </div>
         <div class="panel panel-default">
             <div class="panel-heading no-bottom">
-                <div>
-                    <h4 class="panel-heading-title"><i class="icon icon-mark" data-mark="share_level"></i> 数据饼图</h4>
+                <h4 class="panel-heading-title"><i class="icon icon-mark" data-mark="share_level"></i> 数据饼图</h4>
+            </div>
+            <div class="panel-body">
+                <div class="col-sm-12  col-md-12">
+                    <div id="main" class="container-fluid" style="height:500px;"></div>
+                </div>
+                <div class="col-sm-12  col-md-12">
+                    <div id="mainBar" class="container-fluid" style="height:500px;"></div>
+                </div>
+                <div class="col-sm-12  col-md-6">
+                    <div id="mainPre" class="container-fluid" style="height:500px;"></div>
+                </div>
+                <div class="col-sm-12  col-md-6">
+                    <div id="mainTiming" class="container-fluid" style="height:500px;"></div>
                 </div>
             </div>
-            <div id="main" class="container-fluid" style="height:500px;"></div>
-            <div id="mainBar" class="container-fluid" style="height:500px;"></div>
         </div>
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
             <div class="panel panel-default tabbable">
@@ -167,14 +177,6 @@
     </div>
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
         <div ng-view></div>
-    </div>
-
-    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-        <pre>$location.path() = {{$location.path()}}</pre>
-        <pre>$route.current.templateUrl = {{$route.current.templateUrl}}</pre>
-        <pre>$route.current.params = {{$route.current.params}}</pre>
-        <pre>$route.current.scope.name = {{$route.current.scope.name}}</pre>
-        <pre>$routeParams = {{$routeParams}}</pre>
     </div>
 </div>
 

@@ -15,7 +15,7 @@ angular.module('dataModule').factory('dataService',function($http){
         delete:function(id){//增加
             return $http.delete('/todos/'+id);
         },
-        chart:function(nameBox,dataBox,nameAll,dataAll){
+        chart:function(nameBox,dataBox,nameAll,dataAll,timeBox,clickBox,dtBox,dclickBox){
             var nameBox = nameBox;
             var dataBox = dataBox;
             var myChart = echarts.init(document.getElementById('main'));
@@ -100,27 +100,78 @@ angular.module('dataModule').factory('dataService',function($http){
             };
             var myChartTwo = echarts.init(document.getElementById('mainBar'));
             myChartTwo.setOption(optiontwo);
+
+            var optionThree = {
+                title: {
+                    text: '往期访问量'
+                },
+                tooltip: {},
+                legend: {
+                    data:['访问量']
+                },
+                xAxis: {
+                    data: timeBox
+                },
+                yAxis: {},
+                label: {
+                    normal: {
+                        textStyle: {
+                            color: 'rgba(255, 255, 255, 0.3)'
+                        }
+                    }
+                },
+                series: [{
+                    name: '访问量',
+                    type: 'line',
+                    data: clickBox
+                }]
+            };
+            var myChartThree = echarts.init(document.getElementById('mainPre'));
+            myChartThree.setOption(optionThree);
+
+            var optionFour = {
+                title: {
+                    text: '今日访问量'
+                },
+                tooltip: {},
+                legend: {
+                    data:['访问量']
+                },
+                xAxis: {
+                    data: dtBox
+                },
+                yAxis: {},
+                series: [{
+                    name: '销量',
+                    type: 'line',
+                    data: dclickBox
+                }]
+            };
+            var myChartFour = echarts.init(document.getElementById('mainTiming'));
+            myChartFour.setOption(optionFour);
         }
     }
 });
 
 angular.module('dataModule').controller('indexCtrl',function($scope,dataService,$location){
+    console.log('indexCtrl');
     $scope.nameBox = '';$scope.dataBox = '';$scope.show = true;
     $scope.name = '全站';
     $scope.change = function(name){
+        console.log(name);
         if(name!='全站'){
             $scope.show = false;
         }else{
             $scope.show = true;
         }
     }
-    if($location.path() != '/'){
-        $scope.name = 'view';
+
+    if($location.path().match(/^\/(.)\w/)){
         $scope.show = false;
+        $scope.name = 'view';
     }else{
         $scope.show = true;
     }
-    //$scope.change('全');
     dataService.list($scope.name).success(function(data){
         $scope.nameBox = data.nameBox;
         $scope.dataBox = data.dataBox;
@@ -133,11 +184,14 @@ angular.module('dataModule').controller('indexCtrl',function($scope,dataService,
         $scope.nameAll = data.nameAll;
         $scope.dataAll = data.dataAll;
         $scope.$location = $location;
-        dataService.chart($scope.nameBox,$scope.dataBox,$scope.nameAll,$scope.dataAll);
+        $scope.pre = data.pre;
+        $scope.timeBox = data.timeBox,$scope.clickBox = data.clickBox,$scope.dtBox = data.dtBox,$scope.dclickBox = data.dclickBox;
+        dataService.chart($scope.nameBox,$scope.dataBox,$scope.nameAll,$scope.dataAll,$scope.timeBox,$scope.clickBox,$scope.dtBox,$scope.dclickBox);
     });
 });
 angular.module('dataModule').controller('infoCtrl',function($scope,$routeParams,dataService){
     //从路由中得到ID
+    console.log('infoCtrl');
     var bookId = $routeParams.bookId;
     $scope.nameBox = '';$scope.dataBox = '';
     dataService.item({name:bookId}).success(function(data){
@@ -151,9 +205,7 @@ angular.module('dataModule').controller('infoCtrl',function($scope,$routeParams,
     });
 });
 angular.module('dataModule').config(function($routeProvider){
-    $routeProvider.when('/',{
-        controller:'indexCtrl'
-    }).when('/:bookId',{
+    $routeProvider.when('/:bookId',{
         templateUrl:'tmp/info.html',
         controller:'infoCtrl'
     }).otherwise({
