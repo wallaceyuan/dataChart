@@ -16,8 +16,6 @@ angular.module('dataModule').factory('dataService',function($http){
             return $http.delete('/todos/'+id);
         },
         chart:function(nameBox,dataBox,nameAll,dataAll,timeBox,clickBox,dtBox,dclickBox){
-            var nameBox = nameBox;
-            var dataBox = dataBox;
             var myChart = echarts.init(document.getElementById('main'));
             var option = {
                 tooltip: {
@@ -142,30 +140,30 @@ angular.module('dataModule').factory('dataService',function($http){
                 },
                 yAxis: {},
                 series: [{
-                    name: '销量',
+                    name: '访问量',
                     type: 'line',
                     data: dclickBox
                 }]
             };
             var myChartFour = echarts.init(document.getElementById('mainTiming'));
             myChartFour.setOption(optionFour);
+
         }
     }
 });
 
-angular.module('dataModule').controller('indexCtrl',function($scope,dataService,$location){
+angular.module('dataModule').controller('indexCtrl',function($scope,$rootScope,dataService,$location){
     console.log('indexCtrl');
-    $scope.nameBox = '';$scope.dataBox = '';$scope.show = true;
+    $scope.nameBox = '';$scope.dataBox = '';$scope.show = true;$rootScope.load = true;
     $scope.name = '全站';
     $scope.change = function(name){
-        console.log(name);
+        loading = true;$rootScope.load = true;
         if(name!='全站'){
             $scope.show = false;
         }else{
             $scope.show = true;
         }
     }
-
     if($location.path().match(/^\/(.)\w/)){
         $scope.show = false;
         $scope.name = 'view';
@@ -173,6 +171,7 @@ angular.module('dataModule').controller('indexCtrl',function($scope,dataService,
         $scope.show = true;
     }
     dataService.list($scope.name).success(function(data){
+        $rootScope.load = false;
         $scope.nameBox = data.nameBox;
         $scope.dataBox = data.dataBox;
         $scope.total_amount = data.total_amount;
@@ -189,12 +188,13 @@ angular.module('dataModule').controller('indexCtrl',function($scope,dataService,
         dataService.chart($scope.nameBox,$scope.dataBox,$scope.nameAll,$scope.dataAll,$scope.timeBox,$scope.clickBox,$scope.dtBox,$scope.dclickBox);
     });
 });
-angular.module('dataModule').controller('infoCtrl',function($scope,$routeParams,dataService){
-    //从路由中得到ID
+
+angular.module('dataModule').controller('infoCtrl',function($scope,$rootScope,$routeParams,dataService){
     console.log('infoCtrl');
     var bookId = $routeParams.bookId;
-    $scope.nameBox = '';$scope.dataBox = '';
+    $scope.nameBox = '';$scope.dataBox = '';$scope.loading = loading;
     dataService.item({name:bookId}).success(function(data){
+        $rootScope.load = false;
         $scope.info_amount = data.total_amount;
         $scope.info_delta = data.total_delta;
         $scope.info_delta = data.total_delta;

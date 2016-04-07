@@ -80,7 +80,7 @@
                                 <tr ng-repeat="tot in info_amount">
                                     <td>{{$index+1}}</td>
                                     <td>{{tot.clicknum}}</td>
-                                    <td><a href="tot.pageurl">{{tot.title}}</a></td>
+                                    <td><a href="{{tot.pageurl}}" target="_blank">{{tot.title}}</a></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -102,7 +102,7 @@
                             <tr ng-repeat="dot in info_delta">
                                 <td>{{$index+1}}</td>
                                 <td>{{dot.clicknum}}</td>
-                                <td><a href="tot.pageurl">{{dot.title}}</a></td>
+                                <td><a href="{{dot.pageurl}}" target="_blank">{{dot.title}}</a></td>
                             </tr>
                             </tbody>
                         </table>

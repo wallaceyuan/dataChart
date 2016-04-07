@@ -7,3 +7,6 @@ $('.nav-tabs li a').on('click', function () {
     $(this).parents('.tabbable').find('.tab-pane').removeClass('active');
     $(this).parents('.tabbable').find('#'+href).addClass('active');
 });
+document.addEventListener('DOMContentLoaded', function () {
+    $('.mask').addClass('loaded');
+});

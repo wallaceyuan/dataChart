@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="dataModule">
 <head lang="en">
     <meta charset="UTF-8">
     <title>Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/lib/loaders.css/loaders.min.css">
     <link rel="stylesheet" href="/css/my.css">
 </head>
-<body ng-app="dataModule">
-<nav class="navbar navbar-inverse navbar-fixed-top">
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top" ng-init="load=true">
     <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -33,8 +34,18 @@
         </div>
     </div>
 </nav>
-
 <div class="container-fluid" ng-controller="indexCtrl">
+    <div class="mask" ng-show="load">
+        <div class="loader">
+            <div class="loader-inner line-scale-pulse-out">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
@@ -142,7 +153,7 @@
                                     <tr ng-repeat="tot in total_amount">
                                         <td>{{$index+1}}</td>
                                         <td>{{tot.clicknum}}</td>
-                                        <td><a href="tot.pageurl">{{tot.title}}</a></td>
+                                        <td><a href="{{tot.pageurl}}" target="_blank">{{tot.title}}</a></td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -164,7 +175,7 @@
                                     <tr ng-repeat="dot in total_delta">
                                         <td>{{$index+1}}</td>
                                         <td>{{dot.clicknum}}</td>
-                                        <td><a href="tot.pageurl">{{dot.title}}</a></td>
+                                        <td><a href="{{tot.pageurl}}" target="_blank">{{dot.title}}</a></td>
                                     </tr>
                                     </tbody>
                                 </table>
