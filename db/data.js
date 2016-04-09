@@ -1,8 +1,8 @@
-/**
- * Created by yuan on 2016/4/6.
- */
-
 var request = require('request');
+
+
+
+
 exports.list = function(url,callback){
     request(url, function (error, response, body) {
         var data = JSON.parse(body);
