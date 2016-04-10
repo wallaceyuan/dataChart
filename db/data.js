@@ -1,35 +1,45 @@
 var request = require('request');
-
-
-
+var Memcached = require('memcached');
+Memcached.config.poolSize = 25
+var memcached = new Memcached( "120.27.5.9:11111" );
 
 exports.list = function(url,callback){
-    request(url, function (error, response, body) {
-        var data = JSON.parse(body);
-        var source_pv = data['pv'].source_pv;
-        var nameBox = [];var dataBox = [];var count = 0;
-        var nameAll = [];var dataAll = [];
-        for(var key in source_pv){
-            if(count<6){
-                nameBox.push(key);
-                dataBox.push({value:source_pv[key], name:key});
-            }
-            if(count<50){
-                nameAll.push(key);
-                dataAll.push({value:source_pv[key], name:key});
-            }
-            count++;
+    memcached.get('chartList',function(err,rows){
+        if(err) console.log(err);
+        if (rows) {			//如果mmecache查到了
+            memcached.end();
+            callback(error,rows);
+            console.log("find in cache");	//显示查询结果
+        }else{
+            console.log("notfind");	//显示查询结果
+            request(url, function (error, response, body) {
+                var data = JSON.parse(body);
+                var source_pv = data['pv'].source_pv;
+                var nameBox = [];var dataBox = [];var count = 0;
+                var nameAll = [];var dataAll = [];
+                for(var key in source_pv){
+                    if(count<6){
+                        nameBox.push(key);
+                        dataBox.push({value:source_pv[key], name:key});
+                    }
+                    if(count<50){
+                        nameAll.push(key);
+                        dataAll.push({value:source_pv[key], name:key});
+                    }
+                    count++;
+                }
+                var rows = Array();
+                var pageurl = data['pageurl'];
+                rows.nameBox = nameBox;rows.dataBox = dataBox;rows.nameAll = nameAll;rows.dataAll = dataAll;
+                rows.total_amount = pageurl['total_amount'];
+                rows.total_delta = pageurl['total_delta'];
+                rows.timestamp= data.timestamp;
+                rows.delta_pv = data['pv'].delta_pv;
+                rows.today_pv =  data['pv'].today_pv;
+                rows.yesterday_pv = data['pv'].yesterday_pv;
+                callback(error,rows);
+            });
         }
-        var rows = Array();
-        var pageurl = data['pageurl'];
-        rows.nameBox = nameBox;rows.dataBox = dataBox;rows.nameAll = nameAll;rows.dataAll = dataAll;
-        rows.total_amount = pageurl['total_amount'];
-        rows.total_delta = pageurl['total_delta'];
-        rows.timestamp= data.timestamp;
-        rows.delta_pv = data['pv'].delta_pv;
-        rows.today_pv =  data['pv'].today_pv;
-        rows.yesterday_pv = data['pv'].yesterday_pv;
-        callback(error,rows);
     });
 }
 
