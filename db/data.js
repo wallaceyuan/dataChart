@@ -1,7 +1,14 @@
 var request = require('request');
 var Memcached = require('memcached');
-Memcached.config.poolSize = 25
+Memcached.config.poolSize = 25;
 var memcached = new Memcached( "120.27.5.9:11111" );
+var mysql = require('mysql');
+var pool = mysql.createPool({
+    host:'120.27.5.9',
+    user:'root',
+    password:'admin',
+    database:'dataChart'
+});
 
 exports.list = function(url,callback){
     memcached.get('chartList',function(err,rows){
@@ -84,5 +91,17 @@ exports.source = function(name,res){
             total_delta:total_delta,
             timestamp:timestamp,delta_pv:delta_pv,today_pv:today_pv,yesterday_pv:yesterday_pv
         });
+    });
+}
+
+exports.findUser = function (code,callback) {
+    var sql = 'select * from userId where code ="'+code+'"';
+    pool.query(sql,function(err,result){
+        if(err){
+            console.log(err);
+        }else{
+            console.log('db',result[0]);
+            callback(result);
+        }
     });
 }

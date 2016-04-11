@@ -94,7 +94,8 @@
     function check(){
         if(QC.Login.check()){
             QC.Login.getMe(function(openId, accessToken){
-                window.location.href = 'http://wallaceyuan.site:3000/?id='+openId;
+                //window.location.href = 'http://wallaceyuan.site:3000/?id='+openId;
+                //window.location.href = 'http://127.0.0.1:3000/?id='+openId;
                 //alert(["当前登录用户的", "openId为："+openId, "accessToken为："+accessToken].join("\n"));
             });
             /*            QC.api("get_user_info")

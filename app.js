@@ -4,6 +4,9 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require('express-session');
+var MySQLStore = require('express-mysql-session')(session);
+var flash = require('connect-flash');
 
 
 var routes = require('./routes/index');
@@ -18,6 +21,24 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');
 //设置一下对于html格式的文件，渲染的时候委托ejs的渲染方面来进行渲染
 app.engine('html', require('ejs').renderFile);
+
+var options = {
+  host: '120.27.5.9',
+  port: 3306,
+  user: 'root',
+  password: 'admin',
+  database: 'dataChart'
+};
+
+var sessionStore = new MySQLStore(options);
+
+app.use(session({
+  key: 'dataChart',
+  secret: 'dataChart',
+  store: sessionStore,
+  resave: true,
+  saveUninitialized: true
+}));
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
