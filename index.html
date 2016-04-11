@@ -42,6 +42,7 @@
         <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet.</p>
         <p><a class="btn btn-lg btn-success" href="#" role="button">Get started today</a></p>
     </div>
+    <span id="qqLoginBtn" ></span>
 
     <!-- Example row of columns -->
     <div class="row">
@@ -64,7 +65,17 @@
     </footer>
 
 </div> <!-- /container -->
+<script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="101307254" data-redirecturi="http://wallaceyuan.site/dataChart/login.html" charset="utf-8" ></script>
 
+
+<script type="text/javascript">
+    QC.Login({
+        btnId : "qqLoginBtn",//插入按钮的html标签id
+        size : "A_XL",//按钮尺寸
+        scope : "get_user_info,add_share,permission_weibo,add_topic,add_one_blog,list_album,upload_pic,add_album,check_page_fans",//展示授权，全部可用授权可填 all
+        display : "pc"//应用场景，可选
+    });
+</script>
 
 </body>
 </html>
