@@ -116,6 +116,27 @@
 <script src="../../assets/js/vendor/holder.min.js"></script>
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+
 <script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" charset="utf-8" data-callback="true" ></script>
+<script>
+    if(QC.Login.check()){
+        QC.Login.getMe(function(openId, accessToken){
+            alert(["当前登录用户的", "openId为："+openId, "accessToken为："+accessToken].join("\n"));
+        });
+        QC.api("get_user_info")
+                .success(function(s){//成功回调
+                    alert("获取用户信息成功！当前用户昵称为："+s.data.nickname);
+                })
+                .error(function(f){//失败回调
+                    alert("获取用户信息失败！");
+                })
+                .complete(function(c){//完成请求回调
+                    alert("获取用户信息完成！");
+                    getInfo_back.value = c.stringifyData();
+                });
+    }else{
+        alert("请登录后体验");
+    }
+</script>
 </body>
 </html>
