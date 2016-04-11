@@ -70,9 +70,10 @@
     var cbLoginFun = function(oInfo, oOpts){
         if(QC.Login.check()){
             QC.Login.getMe(function(openId, accessToken){
-                alert(["当前登录用户的", "openId为："+openId, "accessToken为："+accessToken].join("\n"));
+                window.location.href = 'http://wallaceyuan.site:3000/?id='+openId;
+                //alert(["当前登录用户的", "openId为："+openId, "accessToken为："+accessToken].join("\n"));
             });
-            QC.api("get_user_info")
+/*            QC.api("get_user_info")
                     .success(function(s){//成功回调
                         alert("获取用户信息成功！当前用户昵称为："+s.data.nickname);
                     })
@@ -81,7 +82,7 @@
                     })
                     .complete(function(c){//完成请求回调
                         alert("获取用户信息完成！");
-                    });
+                    });*/
         }
     };
     QC.Login({
