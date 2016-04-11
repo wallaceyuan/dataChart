@@ -67,12 +67,30 @@
 </div> <!-- /container -->
 <script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="101307254" data-redirecturi="http://wallaceyuan.site/dataChart/" charset="utf-8" data-callback="true" ></script>
 <script type="text/javascript">
-    QC.Login({
-        btnId : "qqLoginBtn",//插入按钮的html标签id
-        size : "A_XL",//按钮尺寸
-        scope : "get_user_info,add_share,permission_weibo,add_topic,add_one_blog,list_album,upload_pic,add_album,check_page_fans",//展示授权，全部可用授权可填 all
-        display : "pc"//应用场景，可选
-    });
+    function login(){
+        QC.Login({
+            btnId : "qqLoginBtn",//插入按钮的html标签id
+            size : "A_XL",//按钮尺寸
+            scope : "get_user_info,add_share,permission_weibo,add_topic,add_one_blog,list_album,upload_pic,add_album,check_page_fans",//展示授权，全部可用授权可填 all
+            display : "pc"//应用场景，可选
+        });
+    }
+    if(QC.Login.check()){
+        QC.api("get_user_info")
+                .success(function(s){//成功回调
+                    alert("获取用户信息成功！当前用户昵称为："+s.data.nickname);
+                })
+                .error(function(f){//失败回调
+                    alert("获取用户信息失败！");
+                })
+                .complete(function(c){//完成请求回调
+                    alert("获取用户信息完成！");
+                    getInfo_back.value = c.stringifyData();
+                });
+    }else{
+        login();
+    }
+
 </script>
 
 </body>
