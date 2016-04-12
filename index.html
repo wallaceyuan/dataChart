@@ -43,7 +43,14 @@
         <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet.</p>
         <p><a class="btn btn-lg btn-success" href="#" role="button">Get started today</a></p>
     </div>
-    <span id="qqLoginBtn" ></span>
+    <div class="reg" style="display:none;">
+        <p>注册：</p>
+        <span id="qqRegBtn" ></span>
+    </div>
+    <div class="login">
+        <p>登录：</p>
+        <span id="qqLoginBtn" ></span>
+    </div>
 
     <!-- Example row of columns -->
     <div class="row">
@@ -68,21 +75,61 @@
 <script src="//cdn.bootcss.com/jquery/2.2.1/jquery.min.js"></script>
 <script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="101307254"  charset="utf-8" ></script>
 <script type="text/javascript">
-    check();
-    function check(){
-        login(getInfo());
-    }
-    function login(callback){
-        QC.Login({
-            btnId : "qqLoginBtn",//插入按钮的html标签id
-            size : "A_XL",//按钮尺寸
-            scope : "get_user_info,add_share,permission_weibo,add_topic,add_one_blog,list_album,upload_pic,add_album,check_page_fans",//展示授权，全部可用授权可填 all
-            display : "pc"//应用场景，可选
-        },callback);
-    }
-    function getInfo(){
-        console.log('getInfo');
-        QC.api("get_user_info")
+    var cbLogoutFun = function () {
+        console.log("注销成功!");
+    };
+    var cbLoginFun = function(oInfo, oOpts){
+        if(QC.Login.check()){
+            QC.Login.getMe(function(openId, accessToken){
+                var urltest = 'http://127.0.0.1:3000/users/login';
+                var url = 'http://wallaceyuan.site:3000/users/login';
+                $.post(urltest,{openId:openId},function(data){
+                    var code = data.code;
+                    if(code == 200){
+                        console.log(200);
+                        //根据返回数据，更换按钮显示状态方法
+                        var dom = document.getElementById(oOpts['btnId']),
+                                _logoutTemplate=[
+                                    //头像
+                                    '<span><img src="{figureurl}" class="{size_key}"/></span>',
+                                    //昵称
+                                    '<span>{nickname}</span>',
+                                    //退出
+                                    '<span><a href="javascript:QC.Login.signOut();">退出</a></span>'
+                                ].join("");
+                        dom && (dom.innerHTML = QC.String.format(_logoutTemplate, {
+                                    nickname : QC.String.escHTML(oInfo.nickname), //做xss过滤
+                                    figureurl : oInfo.figureurl
+                                })
+                        );
+                        //window.location.href = 'http://127.0.0.1:3000';
+                    }else if(code == 302) {
+                        alert('您的信息不存在，请先注册审核');
+                        QC.Login.signOut();
+                        $('.login').css('display','none');
+                        $('.reg').css('display','block');
+                    }
+                });
+            });
+        }
+    };
+
+    QC.Login({
+        btnId:"qqLoginBtn"    //插入按钮的节点id
+    },cbLoginFun,cbLogoutFun);
+
+
+    QC.Login({
+        btnId : "qqRegBtn",//插入按钮的html标签id
+        size : "C_S",//按钮尺寸
+        scope : "get_user_info,add_share,permission_weibo,add_topic,add_one_blog,list_album,upload_pic,add_album,check_page_fans",//展示授权，全部可用授权可填 all
+        display : "pc"//应用场景，可选
+    },regInfo,cbLogoutFun);
+
+    function regInfo(){
+        if(QC.Login.check()) {
+            console.log('regInfo');
+            QC.api("get_user_info")
             .success(function(s){//成功回调
                 console.log("获取用户信息成功！当前用户昵称为："+s.data.nickname);
             })
@@ -93,14 +140,15 @@
                 console.log(c.data);
                 QC.Login.getMe(function(openId, accessToken){
                     c.data.openId = openId;
-                    var urltest = 'http://127.0.0.1:3000/users/info';
-                    var url = 'http://wallaceyuan.site:3000/users/info';
+                    var urltest = 'http://127.0.0.1:3000/users/reg';
+                    var url = 'http://wallaceyuan.site:3000/users/reg';
                     $.post(urltest,c.data,function(data){
                         console.log(data);
                     });
                 });
                 console.log("获取用户信息完成！");
             });
+        }
     }
 </script>
 </body>
