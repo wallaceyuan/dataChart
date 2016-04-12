@@ -68,57 +68,32 @@
 </div> <!-- /container -->
 <script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="101307254"  charset="utf-8" ></script>
 <script type="text/javascript">
-/*    var cbLoginFun = function(oInfo, oOpts){
+    function check(){
         if(QC.Login.check()){
-            QC.Login.getMe(function(openId, accessToken){
+/*            QC.Login.getMe(function(openId, accessToken){
                 window.location.href = 'http://wallaceyuan.site:3000/?id='+openId;
-                //alert(["当前登录用户的", "openId为："+openId, "accessToken为："+accessToken].join("\n"));
-            });
-/!*            QC.api("get_user_info")
-                    .success(function(s){//成功回调
-                        alert("获取用户信息成功！当前用户昵称为："+s.data.nickname);
-                    })
-                    .error(function(f){//失败回调
-                        alert("获取用户信息失败！");
-                    })
-                    .complete(function(c){//完成请求回调
-                        alert("获取用户信息完成！");
-                    });*!/
+                window.location.href = 'http://127.0.0.1:3000/?id='+openId;
+                alert(["当前登录用户的", "openId为："+openId, "accessToken为："+accessToken].join("\n"));
+            });*/
+            QC.api("get_user_info")
+             .success(function(s){//成功回调
+                console.log("获取用户信息成功！当前用户昵称为："+s.data.nickname);
+             })
+             .error(function(f){//失败回调
+                console.log("获取用户信息失败！");
+             })
+             .complete(function(c){//完成请求回调
+                console.log(c.data);
+                console.log("获取用户信息完成！");
+             });
         }
-    };
+    }
     QC.Login({
         btnId : "qqLoginBtn",//插入按钮的html标签id
         size : "A_XL",//按钮尺寸
         scope : "get_user_info,add_share,permission_weibo,add_topic,add_one_blog,list_album,upload_pic,add_album,check_page_fans",//展示授权，全部可用授权可填 all
         display : "pc"//应用场景，可选
-    },cbLoginFun);*/
-    function check(){
-        if(QC.Login.check()){
-            QC.Login.getMe(function(openId, accessToken){
-                //window.location.href = 'http://wallaceyuan.site:3000/?id='+openId;
-                //window.location.href = 'http://127.0.0.1:3000/?id='+openId;
-                //alert(["当前登录用户的", "openId为："+openId, "accessToken为："+accessToken].join("\n"));
-            });
-            /*            QC.api("get_user_info")
-             .success(function(s){//成功回调
-             alert("获取用户信息成功！当前用户昵称为："+s.data.nickname);
-             })
-             .error(function(f){//失败回调
-             alert("获取用户信息失败！");
-             })
-             .complete(function(c){//完成请求回调
-             alert("获取用户信息完成！");
-             });*/
-        }else{
-            QC.Login({
-                btnId : "qqLoginBtn",//插入按钮的html标签id
-                size : "A_XL",//按钮尺寸
-                scope : "get_user_info,add_share,permission_weibo,add_topic,add_one_blog,list_album,upload_pic,add_album,check_page_fans",//展示授权，全部可用授权可填 all
-                display : "pc"//应用场景，可选
-            });
-        }
-    }
-    check();
+    },check());
 </script>
 
 </body>
