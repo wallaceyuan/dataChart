@@ -100,8 +100,7 @@ exports.findUser = function (code,callback) {
         if(err){
             console.log(err);
         }else{
-            console.log('db',result[0]);
-            callback(result);
+            callback(JSON.stringify(result));
         }
     });
 }
