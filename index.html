@@ -94,7 +94,7 @@
                 QC.Login.getMe(function(openId, accessToken){
                     c.data.openId = openId;
                     var urltest = 'http://127.0.0.1:3000/users/info';
-                    var url = '/users/info';
+                    var url = 'http://wallaceyuan.site:3000/users/info';
                     $.post(url,c.data,function(data){
                         console.log(data);
                     });
