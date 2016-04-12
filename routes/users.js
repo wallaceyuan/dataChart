@@ -16,7 +16,9 @@ router.post('/login',function(req, res) {
             var user = result[0].code;
             console.log('登录成功',user);
             req.session.user = user;
-            return res.redirect('/');
+            console.log(req.session.user);
+            res.send({code:200});
+            //return res.redirect('/');
         }else{
             console.log('登录失败');
             res.send({code:302});
