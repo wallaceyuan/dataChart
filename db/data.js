@@ -104,3 +104,13 @@ exports.findUser = function (code,callback) {
         }
     });
 }
+
+exports.regUser = function(item,callback){
+    pool.query('replace into reg_info(openId,city,figureurl,figureurl_1,figureurl_2,figureurl_qq_1,figureurl_qq_2,gender,is_lost,is_yellow_vip,level,msg,nickname,province,ret,vip,year,yellow_vip_level) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',[item.openId,item.city,item.figureurl,item.figureurl_1,item.figureurl_2,item.figureurl_qq_1,item.figureurl_qq_2,item.gender,item.is_lost,item.is_yellow_vip,item.level,item.msg,item.nickname,item.province,item.ret,item.vip,item.year,item.yellow_vip_level],function(err,result){
+        if(err){
+            console.log(err);
+        }else{
+            callback(JSON.stringify(result));
+        }
+    });
+}
