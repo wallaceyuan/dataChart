@@ -37,6 +37,7 @@ app.use(session({
     saveUninitialized: true,
     store: sessionStore
 }));
+
 app.use(flash());
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -47,7 +48,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function(req,res,next){
-    res.locals.user = req.session.user;
+    res.locals.openid = req.session.openid;
     next();
 });
 

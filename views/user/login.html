@@ -86,18 +86,18 @@
                         console.log(200);
                         //根据返回数据，更换按钮显示状态方法
                         var dom = document.getElementById(oOpts['btnId']),
-                        _logoutTemplate=[
-                            //头像
-                            '<span><img src="{figureurl}" class="{size_key}"/></span>',
-                            //昵称
-                            '<span>{nickname}</span>',
-                            //退出
-                            '<span><a href="javascript:QC.Login.signOut();">退出</a></span>'
-                        ].join("");
+                                _logoutTemplate=[
+                                    //头像
+                                    '<span><img src="{figureurl}" class="{size_key}"/></span>',
+                                    //昵称
+                                    '<span>{nickname}</span>',
+                                    //退出
+                                    '<span><a href="javascript:QC.Login.signOut();">退出</a></span>'
+                                ].join("");
                         dom && (dom.innerHTML = QC.String.format(_logoutTemplate, {
-                                nickname : QC.String.escHTML(oInfo.nickname), //做xss过滤
-                                figureurl : oInfo.figureurl
-                            })
+                                    nickname : QC.String.escHTML(oInfo.nickname), //做xss过滤
+                                    figureurl : oInfo.figureurl
+                                })
                         );
                         //window.location.href = 'http://127.0.0.1:3000';
                     }else if(code == 302) {

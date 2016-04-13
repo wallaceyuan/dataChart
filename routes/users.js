@@ -7,6 +7,11 @@ router.get('/', function(req, res) {
 });
 
 
+router.get('/login', function(req, res) {
+    res.render('user/login', { title: 'Express' });
+});
+
+
 router.post('/login',function(req, res) {
     res.header("Access-Control-Allow-Origin", "*");
     var query = req.body.openId;
@@ -14,11 +19,10 @@ router.post('/login',function(req, res) {
         var result = JSON.parse(data);
         if(result.length>0){
             var user = result[0].code;
-            console.log('登录成功',user);
-            req.session.user = user;
-            console.log(req.session.user);
+            req.session.openId = user;
+            console.log('登录成功','session',req.session.openId);
             res.send({code:200});
-            //return res.redirect('/');
+            //return res.redirect('/:3000');
         }else{
             console.log('登录失败');
             res.send({code:302});
@@ -26,6 +30,10 @@ router.post('/login',function(req, res) {
     });
 });
 
+
+router.get('/reg', function(req, res) {
+    res.render('user/reg', { title: 'Express' });
+});
 
 router.post('/reg',function(req, res) {
     res.header("Access-Control-Allow-Origin", "*");
