@@ -4,14 +4,12 @@ var db = require('../db/data');
 exports.checkLogin = function(req, res, next) {
     console.log('checkLogin',req.session.openId);
     var url_parts = url.parse(req.url, true);
-    var query = url_parts.query.id;
-    //req.session.openId = null;
-    if (req.session.openId) {
+    if(req.session.openId != null){
         console.log('已登');
         next();
     }else{
-        console.log('快去登录');
-        next();
+        req.flash('error', '未登录!');
+        return res.redirect('/users/login');
     }
 }
 

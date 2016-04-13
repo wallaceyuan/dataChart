@@ -49,7 +49,7 @@ p{
 	padding: 94px 0 0 0;
 }*/
 .banner{height:100px;background:black;}
-.card{position:relative;box-sizing:border-box;padding:11px 12px 10px;border-bottom:1px solid #eaeae9;background-color:#fff;overflow: hidden;}
+.card{min-height: 160px;position:relative;box-sizing:border-box;padding:11px 12px 10px;border-bottom:1px solid #eaeae9;background-color:#fff;overflow: hidden;}
 .media-main{position:absolute;top:11px;left:12px;}
 .media-main img{display:block;width:38px;height:38px;vertical-align:top;}
 .card .item-list{float:left;display:inline;padding:0 11px 0 48px;font-size:.9em;}

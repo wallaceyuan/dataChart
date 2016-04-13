@@ -32,8 +32,10 @@ var options = {
 var sessionStore = new MySQLStore(options);
 
 app.use(session({
-    secret: 'dataChart',
-    resave: false,
+    secret: 'kkChart',
+    key:'kkChart',
+    cookie: {maxAge: 1000 * 60 * 60 * 1},////设定 cookie 1 天
+    resave:true,
     saveUninitialized: true,
     store: sessionStore
 }));
@@ -48,7 +50,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function(req,res,next){
-    res.locals.openid = req.session.openid;
+    res.locals.openId = req.session.openId;
+    res.locals.success = req.flash('success').toString();
+    res.locals.error = req.flash('error').toString();
     next();
 });
 

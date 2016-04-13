@@ -7,7 +7,7 @@ var router = express.Router();
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-    res.render('detail', { title: 'Express' });
+    res.render('details/detail', { title: 'Express' });
 });
 
 router.post('/now',function(req, res, next) {
